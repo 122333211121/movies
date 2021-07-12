@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title>电影推荐系统</title>
+    {% endblock %}
+    {% block css %}
+        <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+    {% endblock %}
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">电影推荐</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+
+
+                {% if request.session.is_login %}
+                    <li><a href="" style="color: yellow">{{ request.session.username }}</a></li>
+                    <li><a href="{% url 'movie:loginout' %}">退出账号</a></li>
+
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    {% block left %}
+        <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="/user/index/" class="glyphicon glyphicon-home">全部影片</a></li>
+                <li><a href="/user/showleavingmessage/" class="glyphicon glyphicon-pencil">留言</a></li>
+
+            </ul>
+
+        </div>
+    {% endblock %}
+
+    {% block main %}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">全部影片</h1>
+                <form role="search" class="navbar-form-custom" action="">
+                    <div class="form-group">
+                        <input type="text" placeholder="查询影片..." class="form-control" name="top-search" id="top-search">
+                    </div>
+                </form>
+
+            <div>
+                {% if request.session.pk == 1 %}
+                    {% for movie in movies %}
+                        <img src="/static/images/{{ movie.id }}.jpg"
+                             width="270" height="400" class="img-responsive" alt="Generic placeholder thumbnail">
+                        <h3>{{ movie.chinese_name }}</h3>
+                        <h4>{{ movie.english_name }}</h4>
+                        <br>
+                        <h4>{{ movie.information }}</h4>
+
+                    {% endfor %}
+                {% else %}
+                    <h5>没有电影了</h5>
+                    {% endif %}
+            <ul class="pager">
+                <div class="pagination">
+    <span class="step-links">
+
+{#        判断是否有上一页#}
+        {% if movies.has_previous %}
+            <a href="?page={{ movies.previous_page_number }}" class="btn btn-primary">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ movies.number }} 页 （{{ movies.number }}-{{ movies.paginator.num_pages }}）
+        </span>
+{#      判断是否有下一页#}
+        {% if movies.has_next %}
+            <a href="?page={{ movies.next_page_number }}" class="btn btn-primary">下一页</a>
+        {% endif %}
+    </span>
+            </ul>
+            </div>
+        </div>
+    {% endblock %}
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

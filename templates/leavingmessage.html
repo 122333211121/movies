@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title>留言板</title>
+    {% endblock %}
+
+    {% block css %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/comment/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/comment/comment.css' %}">
+    {% endblock %}
+</head>
+
+<body>
+{% block header %}
+    <div class="blog-masthead">
+        <div class="container">
+            <nav class="blog-nav">
+
+                <a class="blog-nav-item active" href="#">留言板</a>
+                <a class="blog-nav-item" href="/user/addleavingmessage">发表留言</a>
+                <a class="blog-nav-item" href="/user/index/">返回</a>
+                {% if request.session.is_login %}
+                    <a style="color: yellow" class="blog-nav-item pull-right" href="">{{ request.session.username }}</a>
+                {% endif %}
+
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+    <div class="blog-header">
+        <h1 class="blog-title">Message Board</h1>
+        <p class="lead blog-description">请表达心声的地方~交友、放松...</p>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+            {% for contact in contacts %}
+                <div class="blog-post">
+                <h3 class="blog-post-title" style="font-family: 华文行楷">{{ contact.user.username }}</h3>
+                <p class="blog-post-meta">{{ contact.addtime }}</p>
+
+                <p>{{ contact.content }}</p>
+                {% if request.session.pk == 1 %}
+
+
+                <a class="btn btn-danger glyphicon glyphicon-trash right" href="/user/delmessage/?uid={{ contact.user.id }}&messageid={{ contact.pk }}">
+
+                </a>
+                {% endif %}
+                <hr>
+                <div class="commentAll">
+                <form action="/user/comment/?pk={{ contact.pk }}" method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="reviewArea clearfix">
+                        <div class="flex-text-wrap">
+                            <pre class="pre"><span></span><br></pre>
+                            <textarea name="comment" class="content comment-input" placeholder="快来评论占座位吧~"></textarea>
+                        </div>
+                        <button class="btn btn-primary pull-right">评论</button>
+                    </div>
+                </form>
+                    <div class="comment-show">
+                        {% for comment in comments %}
+                            {% if comment.leavingmessage.pk == contact.pk %}
+
+                        <div class="comment-show-con clearfix">
+
+                            <div class="comment-show-con-list pull-left clearfix">
+                                <div class="pl-text clearfix"><a href="#"
+                                                                 class="comment-size-name">{{ comment.user.username }}
+                                    : </a> <span
+                                        class="my-pl-con">&nbsp;{{ comment.content }}</span></div>
+                                <div class="date-dz"><span
+                                        class="date-dz-left pull-left comment-time">{{ comment.time }}</span>
+                                    <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"
+                                                                                              class="removeBlock">删除</a>
+
+                                    </div>
+                                </div>
+                                <div class="hf-list-con"></div>
+                            </div>
+                        </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+{% endfor %}
+
+            <ul class="pager">
+                <div class="pagination">
+    <span class="step-links">
+
+{#        判断是否有上一页#}
+        {% if contacts.has_previous %}
+            <a href="?page={{ contacts.previous_page_number }}" class="btn btn-primary">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            第 {{ contacts.number }} 页 （{{ contacts.number }}-{{ contacts.paginator.num_pages }}）
+        </span>
+{#      判断是否有下一页#}
+        {% if contacts.has_next %}
+            <a href="?page={{ contacts.next_page_number }}" class="btn btn-primary">下一页</a>
+        {% endif %}
+    </span>
+            </ul>
+            </div>
+        </div><!-- /.blog-main -->
+
+    </div><!-- /.row -->
+
+
+{% endblock %}
+
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+{% block scripts %}
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+{% endblock %}
+
+
+
+{#<script>#}
+        {# 给id=comment加点击事件 #}
+{#        $('#comment').click(function () {#}
+{#            var content = $('.comment-input').val();#}
+{#            var leavingmessage_id = ;#}
+{##}
+{##}
+{#            var user_id = {{ request.session.pk }};#}
+{#            var user_name = '{{ request.session.username }}';#}
+{#            $.ajax({#}
+{#            url: '/user/comment/',   {#使用ajax的路径#}
+{#            data:{   {# 传到url的数据，字典形式 #}
+{#                content:content,#}
+{#                leavingmessage_id:leavingmessage_id,#}
+{#                user_id:user_id,#}
+{#            },#}
+{#            success: (res) => {#}
+{#                if (res.status){#}
+{#                    // 评论插入成功#}
+{#                    $('.comment-show').append(`<div class="comment-show-con clearfix">#}
+{#                <div class="comment-show-con-list pull-left clearfix">#}
+{#                    <div class="pl-text clearfix"><a href="#" class="comment-size-name">${user_name} : </a> <span#}
+{#                            class="my-pl-con">&nbsp;${content}</span></div>#}
+{#                    <div class="date-dz"><span class="date-dz-left pull-left comment-time">${res.time}</span>#}
+{#                        <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;"#}
+{#                                                                                  class="removeBlock">删除</a>#}
+{#                    </div>#}
+{#                    <div class="hf-list-con"></div>#}
+{#                </div>#}
+{#            </div>`);#}
+{#                    $('.comment-input').val('')#}
+{#                    alert('评论成功！')#}
+{#                }#}
+{#            }#}
+{#        })#}
+{#        })#}
+{#    </script>#}
+
+
+
+</body>
+
+</html>

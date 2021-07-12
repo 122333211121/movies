@@ -1,0 +1,38 @@
+{% extends 'leavingmessage.html' %}
+{% block title %}
+    <title>留言板</title>
+{% endblock %}
+
+{% block header %}
+    <div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+
+            <a class="blog-nav-item" href="/user/showleavingmessage">留言板</a>
+            <a class="blog-nav-item active" href="#">发表留言</a>
+            <a class="blog-nav-item" href="/user/index/">返回</a>
+            {% if request.session.is_login %}
+                <a style="color: yellow" class="blog-nav-item pull-right" href="">{{ request.session.username }}</a>
+            {% endif %}
+        </nav>
+    </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+    <div class="blog-header">
+        <h1 class="blog-title"> Message Board</h1>
+        <p class="lead blog-description">请表达心声的地方~交友、放松...</p>
+    </div>
+{#   留言板文本框     #}
+        <form action="" method="post">
+            {% csrf_token %}
+            <textarea class="form-control" rows="8" name="content" placeholder="畅所欲言吧~"></textarea>
+            <br>
+            <button type="submit" class="btn btn-primary">发表留言</button>
+        </form>
+
+
+{% endblock %}

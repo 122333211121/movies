@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户信息</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/signin.css">
+</head>
+<body>
+<div class="container">
+    <form class="form-signin" action="" method="post">
+        {% csrf_token %}
+        <h2 class="form-signin-heading">请 修 改</h2>
+
+
+        <label for="inputEmail" class="sr-only">邮箱</label>
+        <input name="email" type="email" id="inputEmail" class="form-control" value="{{ user.email }}" placeholder="请输入邮箱"
+               autofocus="">
+
+        <label for="inputUsername" class="sr-only">姓名</label>
+        <input name="use_id" type="text" id="inputUse_id" class="form-control" value="{{ user.use_id }}" placeholder="请输入姓名">
+
+        <label for="inputUsername" class="sr-only">用户名</label>
+        <input name="username" type="text" id="inputUsername" class="form-control" value="{{ user.username }}" placeholder="请输入用户名">
+
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input name="password" type="text" id="inputPassword" class="form-control" value="{{ user.password }}" placeholder="请输入密码">
+
+        <label for="inputPhonenumber" class="sr-only">手机号码</label>
+        <input name="phonenumber" type="text" id="inputPhonenumber" class="form-control" value="{{ user.phonenumber }}" placeholder="请输入手机号码">
+
+        <label for="inputHometown" class="sr-only">家乡</label>
+        <input name="hometown" type="text" id="inputHometown" class="form-control" value="{{ user.hometown }}" placeholder="请输入家乡">
+
+        <br>
+        <button class="btn btn-lg btn-danger btn-block" type="submit">修改</button>
+        <br>
+        <a href="/user/index/"><button class="btn btn-lg btn-primary btn-block" type="button">返回</button></a>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>

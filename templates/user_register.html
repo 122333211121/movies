@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>注册界面</title>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<body>
+<div class="login-container">
+    <h1>注册</h1>
+    <div class="connect">
+        <p>Welcome to Movie Recommendation System</p>
+    </div>
+    <form action="" method="post" id="loginForm">
+        {% csrf_token %}
+        <div>
+            <input type="text" name="email" class="email" placeholder="邮箱" autocomplete="off"/>
+        </div>
+        <div>
+            <input type="text" name="username" class="username" placeholder="用户名" autocomplete="off"/>
+        </div>
+        <div>
+            <input type="text" name="use_id" class="use_id" placeholder="姓名" autocomplete="off"/>
+        </div>
+        <div>
+            <input type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false"
+                   onpaste="return false"/>
+        </div>
+        <div>
+            <input type="password" name="repassword" class="password" placeholder="确认密码" autocomplete="off"/>
+        </div>
+        <div>
+            <input type="text" name="phonenumber" class="username" placeholder="电话号码" autocomplete="off"/>
+        </div>
+        <div>
+            <input type="text" name="hometown" class="username" placeholder="家乡" autocomplete="off"/>
+        </div>
+
+
+
+        <div>{{ msg }}</div>
+        <button id="submit" type="submit">注 册</button>
+    </form>
+    <a href="{% url 'movie:login' %}">
+        <button type="button" class="register-tis">已经有账号？</button>
+    </a>
+</div>
+</body>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'js/supersized.3.2.7.min.js' %}"></script>
+<script src="{% static 'js/supersized-init.js' %}"></script>
+
+</html>
